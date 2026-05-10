@@ -44,7 +44,11 @@ export default function LandingPage() {
               <span>Launch Engine</span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-               {/* ─── Hero Section (Compact Optimization) ───────── */}
+          </div>
+        </div>
+      </header>
+
+      {/* ─── Hero Section (Compact Optimization) ───────── */}
       <section className="relative pt-40 pb-24 px-6 lg:pt-48 lg:pb-32">
         {/* Deep Space Atmosphere */}
         <div className="absolute inset-0 z-0">
