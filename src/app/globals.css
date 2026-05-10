@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────
-   CropGuard AI — Premium Organic Design System (V2)
+   PreciFarm AI — Premium Organic Design System (V2)
    Now featuring full Dark Mode support and Enhanced Micro-interactions.
    ───────────────────────────────────────────────────────── */
 
@@ -211,3 +211,33 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-track { background: var(--bg-color); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--green-main); }
+
+/* ─── Top-Tier Scanning FX ────────────────────────── */
+.scan-laser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #21A049, transparent);
+  box-shadow: 0 0 20px #21A049;
+  z-index: 50;
+  animation: scan-loop 2.5s infinite ease-in-out;
+}
+
+.scan-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(33, 160, 73, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(33, 160, 73, 0.1) 1px, transparent 1px);
+  background-size: 30px 30px;
+  z-index: 40;
+  opacity: 0.6;
+}
+
+@keyframes scan-loop {
+  0% { top: 0%; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}

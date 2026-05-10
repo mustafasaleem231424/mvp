@@ -334,7 +334,9 @@ export default function DashboardPage() {
                     <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#21A049] rounded-tr-2xl translate-x-2 -translate-y-2" />
                     <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#21A049] rounded-bl-2xl -translate-x-2 translate-y-2" />
                     <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[#21A049] rounded-br-2xl translate-x-2 translate-y-2" />
-                    <div className="absolute inset-0 bg-[#21A049]/10 animate-pulse" />
+                    <div className="absolute inset-0 bg-[#21A049]/10" />
+                    <div className="scan-grid" />
+                    <div className="scan-laser" />
                   </div>
                 </div>
               </div>

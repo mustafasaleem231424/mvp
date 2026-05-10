@@ -32,38 +32,25 @@ export async function POST(request) {
     });
 
     const prompt = `
-      You are the CropGuard Expert Pathologist. 
+      You are a Senior Agronomist and expert Plant Pathologist.
+      Provide an elite-level botanical diagnostic report.
       
-      STRICT REQUIREMENT: YOUR FIRST TASK IS TO VERIFY IF THE IMAGE IS AN AGRICULTURAL SUBJECT.
+      STEP 1: Verify if the image is an agricultural subject (crops, leaves, fruits, vegetables, farms).
+      If not agricultural (e.g. people, cars, pets), return {"isNotPlant": true}.
       
-      ACCEPTED SUBJECTS:
-      - Plant leaves, stems, or roots
-      - Vegetables (e.g. Tomato, Pepper, Potato)
-      - Fruits (e.g. Apple, Grapes, Citrus)
-      - Field Crops (e.g. Wheat, Rice, Corn)
-      - Aerial or Wide-angle shots of "Huge Farms" / Fields
-      
-      IF THE IMAGE CONTAINS:
-      - People, faces, or hands
-      - Animals, pets
-      - Vehicles, cars, bikes
-      - Household electronics, furniture, computers
-      
-      YOU MUST RETURN: {"isNotPlant": true} and nothing else.
-      
-      IF (AND ONLY IF) IT IS A PLANT:
-      Analyze for diseases and return:
+      STEP 2: Identify the species and pathogen with extreme technical precision.
+      Return JSON:
       {
         "isNotPlant": false,
-        "crop": "Species Name",
-        "disease": "Common Disease Name",
-        "scientificName": "Scientific Pathogen Name",
-        "pathogenType": "Fungal/Bacterial/Viral/Nutrient",
+        "crop": "Exact Species & Variety",
+        "disease": "Specific Pathogen/Condition",
+        "scientificName": "Latin Classification",
+        "pathogenType": "Biological Category",
         "isHealthy": boolean,
-        "isRuined": boolean (True if infection is >80% and plant is beyond recovery),
+        "isRuined": boolean,
         "confidence": number,
         "severity": "Low/Medium/High/Critical",
-        "advice": "Treatment Protocol",
+        "advice": "Elite treatment protocol including active chemical/biological agents",
         "shouldSpray": boolean
       }
     `;
