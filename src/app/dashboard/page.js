@@ -111,6 +111,18 @@ export default function DashboardPage() {
       });
       const analysisResult = await analyzeImage(img);
       setResult(analysisResult);
+
+      // Automated History Saving (if logged in)
+      if (analysisResult.success !== false && !analysisResult.error) {
+        const { saveScanResult } = await import('@/lib/supabase');
+        await saveScanResult({
+          label: analysisResult.topPrediction?.label || 'Unknown',
+          is_healthy: analysisResult.isHealthy,
+          confidence: analysisResult.confidence,
+          detections: [analysisResult.topPrediction],
+          should_spray: analysisResult.shouldSpray ? 'SPRAY' : 'NO_SPRAY'
+        }).catch(e => console.warn('Silent History Save Failed:', e));
+      }
     } catch (err) {
       console.error('Analysis error:', err);
       setResult({ error: 'Analysis failed. Please try again.' });

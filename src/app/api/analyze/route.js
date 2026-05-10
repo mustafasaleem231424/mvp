@@ -17,10 +17,20 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: 'Missing "image" field. Send a base64-encoded image.' }, { status: 400 });
     }
 
-    // Extract base64 part
-    const base64Data = body.image.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
+    // Extract MIME type and base64 part
+    const mimeMatch = body.image.match(/^data:(image\/\w+);base64,/);
+    const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+    const base64Data = body.image.replace(/^data:image\/\w+;base64,/, "");
     
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+      ]
+    });
 
     const prompt = `
       You are the CropGuard Expert Pathologist, a world-class AI specialized in botanical diagnostics and agricultural pathology.
@@ -53,7 +63,7 @@ export async function POST(request) {
       {
         inlineData: {
           data: base64Data,
-          mimeType: "image/jpeg"
+          mimeType: mimeType
         }
       }
     ];
