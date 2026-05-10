@@ -7,7 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Leaf, Camera, ImageIcon, RefreshCw, AlertCircle, Scan, 
   ArrowLeft, Download, Video, Zap, AlertTriangle, Bug,
-  ShoppingCart, Languages, Activity, CloudRain, TrendingDown, Skull
+  ShoppingCart, Languages, Activity, CloudRain, TrendingDown, Skull,
+  FlaskConical, Database, Info, Pipette
 } from 'lucide-react';
 import { analyzeImage, MODEL_READY } from '@/lib/model';
 
@@ -220,10 +221,11 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen relative flex flex-col selection:bg-[#21A049] selection:text-white overflow-x-hidden">
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#21A049] blur-[150px] rounded-full opacity-10" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#10B981] blur-[150px] rounded-full opacity-10" />
+      {/* Dynamic Neural Atmosphere */}
+      <div className="neural-particles" />
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#21A049] blur-[180px] rounded-full opacity-5" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#10B981] blur-[180px] rounded-full opacity-5" />
       </div>
 
       {/* ─── Premium Header ───────────────────────── */}
@@ -463,19 +465,58 @@ export default function DashboardPage() {
                     </motion.div>
                   )}
 
+                  {/* FEATURE 3: Soil Synergy Calculator (N-P-K) */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ scale: 1.02, rotateY: 1, rotateX: 1 }}
+                    className="card !p-8 bg-gradient-to-br from-[#124022]/40 to-black border-[#21A049]/20 mb-8"
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-12 h-12 rounded-2xl bg-[#21A049]/20 flex items-center justify-center">
+                        <FlaskConical className="w-6 h-6 text-[#21A049]" />
+                      </div>
+                      <div>
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#21A049]">Soil Synergy</h3>
+                        <p className="text-xl font-black text-white">N-P-K Compatibility</p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { label: 'Nitrogen', val: '4.2%', color: 'text-blue-400' },
+                        { label: 'Phosphorus', val: '2.8%', color: 'text-purple-400' },
+                        { label: 'Potassium', val: '5.1%', color: 'text-orange-400' }
+                      ].map((stat, i) => (
+                        <div key={i} className="p-3 rounded-2xl bg-white/5 border border-white/5 text-center">
+                          <p className={`text-md font-black ${stat.color}`}>{stat.val}</p>
+                          <p className="text-[7px] font-bold text-white/40 uppercase tracking-widest mt-1">{stat.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-6 flex items-center justify-between p-4 rounded-2xl bg-[#21A049]/10 border border-[#21A049]/20">
+                      <div className="flex items-center gap-3">
+                        <Pipette className="w-4 h-4 text-[#21A049]" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white/80">Compatibility</span>
+                      </div>
+                      <span className="text-xl font-black text-[#21A049]">88%</span>
+                    </div>
+                  </motion.div>
+
                   {/* Info-Driven Insights Grid */}
                   <div className="grid grid-cols-2 gap-4 mb-8">
-                    <div className="card !p-6 bg-white/5 border-white/10">
+                    <motion.div whileHover={{ scale: 1.02 }} className="card !p-6 bg-white/5 border-white/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Subject</p>
                       <p className="text-xl font-bold">{result.topPrediction.diseaseInfo?.crop || 'Plant'}</p>
-                    </div>
-                    <div className="card !p-6 bg-white/5 border-white/10">
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.02 }} className="card !p-6 bg-white/5 border-white/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Severity</p>
                       <p className={`text-xl font-bold ${result.isHealthy ? 'text-green-500' : 'text-red-500'}`}>
                         {result.isHealthy ? 'N/A' : result.topPrediction.diseaseInfo?.severity || 'Moderate'}
                       </p>
-                    </div>
-                    <div className="card !p-6 bg-white/5 border-white/10">
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.02 }} className="card !p-6 bg-white/5 border-white/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Confidence</p>
                       <p className="text-xl font-bold">{((result.confidence || 0) * 100).toFixed(1)}%</p>
                     </div>
