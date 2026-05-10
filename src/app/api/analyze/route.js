@@ -34,14 +34,20 @@ export async function POST(request) {
     const prompt = `
       You are the CropGuard Expert Pathologist. 
       
-      STRICT REQUIREMENT: YOUR FIRST TASK IS TO VERIFY IF THE IMAGE IS A PLANT, LEAF, FRUIT, OR CROP.
+      STRICT REQUIREMENT: YOUR FIRST TASK IS TO VERIFY IF THE IMAGE IS AN AGRICULTURAL SUBJECT.
+      
+      ACCEPTED SUBJECTS:
+      - Plant leaves, stems, or roots
+      - Vegetables (e.g. Tomato, Pepper, Potato)
+      - Fruits (e.g. Apple, Grapes, Citrus)
+      - Field Crops (e.g. Wheat, Rice, Corn)
+      - Aerial or Wide-angle shots of "Huge Farms" / Fields
       
       IF THE IMAGE CONTAINS:
-      - People, faces, hands, or eyes
+      - People, faces, or hands
       - Animals, pets
       - Vehicles, cars, bikes
       - Household electronics, furniture, computers
-      - Any non-agricultural object
       
       YOU MUST RETURN: {"isNotPlant": true} and nothing else.
       

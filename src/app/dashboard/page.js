@@ -123,8 +123,8 @@ export default function DashboardPage() {
       if (analysisResult.error) throw new Error(analysisResult.error);
       
       // AUTO-REJECTION FOR NON-PLANT OBJECTS
-      // If the AI is not at least 60% confident, we treat it as a non-plant object failsafe.
-      if (analysisResult.confidence < 0.6) {
+      // If the AI is not at least 40% confident, we treat it as a non-plant object failsafe.
+      if (analysisResult.confidence < 0.4) {
         analysisResult.isNotPlant = true;
       }
       
