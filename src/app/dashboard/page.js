@@ -220,20 +220,22 @@ export default function DashboardPage() {
   }, [cameraStream]);
 
   return (
-    <div className="min-h-screen relative flex flex-col selection:bg-[#21A049] selection:text-white overflow-x-hidden">
-      {/* Dynamic Neural Atmosphere */}
+    <div className="min-h-screen relative flex flex-col selection:bg-white selection:text-black overflow-x-hidden bg-black">
+      {/* Deep Space Background */}
       <div className="neural-particles" />
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#21A049] blur-[180px] rounded-full opacity-5" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#10B981] blur-[180px] rounded-full opacity-5" />
+        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#10B981] blur-[250px] rounded-full opacity-[0.03]" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-[#10B981] blur-[250px] rounded-full opacity-[0.03]" />
       </div>
 
-      {/* ─── Premium Header ───────────────────────── */}
-      <header className="sticky top-0 z-50 glass-header">
-        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors group">
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-bold text-xs uppercase tracking-widest">Back to Hub</span>
+      {/* ─── Elite Obsidian Header ─────────────────── */}
+      <header className="sticky top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <Leaf className="w-6 h-6 text-black" />
+            </div>
+            <span className="font-black text-xl tracking-tighter text-white">Preci<span className="text-[#10B981]">Farm</span></span>
           </Link>
           <div className="flex items-center gap-4">
             <button 
@@ -402,14 +404,17 @@ export default function DashboardPage() {
               ) : (
                 <>
                   {/* Direct Diagnostic Verdict */}
-                  <div className={`mb-8 p-6 rounded-2xl border-2 text-center ${result.isHealthy ? 'bg-green-500/10 border-green-500/30' : result.isRuined ? 'bg-black border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)]' : result.shouldSpray ? 'bg-red-500/10 border-red-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
-                    {result.isRuined && <Skull className="w-12 h-12 text-red-500 mx-auto mb-4 animate-bounce" />}
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tight uppercase mb-2">
+                  <div className={`mb-12 p-10 rounded-[32px] border text-center transition-all duration-700 ${result.isHealthy ? 'bg-white/5 border-white/10' : result.isRuined ? 'bg-red-500/5 border-red-500/20 shadow-[0_0_50px_rgba(239,68,68,0.1)]' : 'bg-white/5 border-white/10'}`}>
+                    {result.isRuined && <Skull className="w-16 h-16 text-red-500 mx-auto mb-6 animate-pulse" />}
+                    <h2 className="text-5xl md:text-6xl font-black tracking-tighter text-white mb-4">
                       {result.isHealthy ? 'Healthy Specimen' : result.isRuined ? 'Crop Ruined' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
                     </h2>
-                    <p className={`text-sm font-black uppercase tracking-[0.2em] ${result.isHealthy ? 'text-green-500' : 'text-red-500'}`}>
-                      {result.isHealthy ? 'No Intervention Required' : result.isRuined ? 'Total Loss: No Point in Spraying' : result.shouldSpray ? 'Action Required: Spray Recommended' : 'Action Required: Monitor Closely'}
-                    </p>
+                    <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+                      <div className={`w-2 h-2 rounded-full ${result.isHealthy ? 'bg-[#10B981]' : 'bg-red-500'}`} />
+                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">
+                        {result.isHealthy ? 'Specimen Clear' : result.isRuined ? 'Critical Loss' : 'Action Required'}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Expert Pathogen Spotlight */}

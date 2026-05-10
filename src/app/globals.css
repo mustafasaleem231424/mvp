@@ -35,16 +35,15 @@
     --bg-color: #000000;
     --bg-gradient: radial-gradient(circle at top right, #111111 0%, #000000 100%);
     --surface: #0a0a0a;
-    --surface-hover: #141414;
-    --text: #ffffff;
-    --text-secondary: #a3a3a3;
-    --primary-glow: rgba(33, 160, 73, 0.3);
-    --green-main: #21A049;
+    --surface: rgba(10, 10, 10, 0.7);
+    --surface-hover: rgba(20, 20, 20, 0.9);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --green-main: #10B981;
+    --green-light: #34D399;
     --green-dark: #ffffff;
-    --green-light: #122416;
-    --surface: #0a0a0a;
-    --surface-hover: #121212;
-    --border: rgba(255, 255, 255, 0.12);
+    --primary-glow: rgba(16, 185, 129, 0.15);
     --header-bg: rgba(0, 0, 0, 0.9);
     
     --status-green: #21A049;
@@ -53,7 +52,20 @@
   }
 }
 
+[data-theme='dark'] {
+  --bg-color: #000000;
+  --surface: rgba(10, 10, 10, 0.8);
+  --border: rgba(255, 255, 255, 0.05);
+}
+
 /* ─── Base ────────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
@@ -67,6 +79,8 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   transition: background-color 0.4s ease, color 0.4s ease;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Subtle organic texture - Adaptable opacity */
@@ -109,61 +123,60 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Premium Components ─────────────────────────────── */
 .card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--radius);
-  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.4);
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
   position: relative;
   overflow: hidden;
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.005);
-  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.3);
-  border-color: rgba(33, 160, 73, 0.4);
-  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-4px) scale(1.01);
+  background: rgba(20, 20, 20, 0.6);
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 20px 80px -20px rgba(16, 185, 129, 0.15);
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 16px 32px;
-  border-radius: 100px;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 16px;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: none;
-  position: relative;
-  z-index: 1;
+  white-space: nowrap;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--green-main) 0%, #059669 100%);
-  color: #FFFFFF;
-  box-shadow: 0 10px 25px -5px var(--primary-glow);
+  background: #FFFFFF;
+  color: #000000;
+  box-shadow: 0 10px 40px -10px rgba(255, 255, 255, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 20px 35px -10px var(--primary-glow);
+  box-shadow: 0 20px 60px -10px rgba(255, 255, 255, 0.4);
 }
 
 .btn-secondary {
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
-  background: var(--surface-hover);
-  border-color: var(--green-main);
-  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #10B981;
+  color: #10B981;
 }
 
 /* ─── Traffic Light System ────────────────────────────── */
