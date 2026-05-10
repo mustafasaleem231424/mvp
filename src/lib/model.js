@@ -13,6 +13,11 @@ export const MODEL_READY = true;
  * Helper to convert an image element (img, canvas, video) into a base64 JPEG string.
  */
 function getBase64FromImage(imageElement) {
+  // If it's a data URL string, return it
+  if (typeof imageElement === 'string' && imageElement.startsWith('data:image')) {
+    return imageElement;
+  }
+
   // If it's an img element and already a data URL, just return it
   if (imageElement instanceof HTMLImageElement && imageElement.src.startsWith('data:image')) {
     return imageElement.src;

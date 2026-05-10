@@ -17,10 +17,12 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: 'Missing "image" field. Send a base64-encoded image.' }, { status: 400 });
     }
 
-    // Extract MIME type and base64 part
+    // Robust base64 extraction: handle with or without the data:image/xxx;base64, prefix
+    const base64Data = body.image.includes(',') ? body.image.split(',')[1] : body.image;
+    
+    // Attempt to extract MIME type from the header if present, fallback to jpeg
     const mimeMatch = body.image.match(/^data:(image\/\w+);base64,/);
     const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-    const base64Data = body.image.replace(/^data:image\/\w+;base64,/, "");
     
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash",
@@ -125,7 +127,11 @@ export async function POST(request) {
   } catch (err) {
     console.error("Gemini API Error:", err);
     return NextResponse.json(
-      { success: false, error: 'AI Analysis failed: ' + err.message },
+      { 
+        success: false, 
+        error: 'AI Engine Fault: ' + err.message,
+        details: err.stack 
+      },
       { status: 500 }
     );
   }
