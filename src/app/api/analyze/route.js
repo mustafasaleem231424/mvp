@@ -60,21 +60,21 @@ export async function POST(request) {
     // Format to match the frontend expected structure
     const formattedResult = {
       topPrediction: {
-        className: aiData.disease,
-        label: aiData.disease,
-        confidence: aiData.confidence,
-        isHealthy: aiData.isHealthy,
+        className: aiData.disease || 'Unknown',
+        label: aiData.disease || 'Unknown',
+        confidence: aiData.confidence || 0.9,
+        isHealthy: !!aiData.isHealthy,
         diseaseInfo: {
-          crop: aiData.crop,
-          disease: aiData.disease,
-          severity: aiData.severity,
-          advice: aiData.advice
+          crop: aiData.crop || 'Plant',
+          disease: aiData.disease || 'Unknown',
+          severity: aiData.severity || 'Medium',
+          advice: aiData.advice || 'No specific advice provided by AI.'
         }
       },
       light: aiData.isHealthy ? 'green' : (aiData.shouldSpray ? 'red' : 'amber'),
-      shouldSpray: aiData.shouldSpray,
-      confidence: aiData.confidence,
-      isHealthy: aiData.isHealthy,
+      shouldSpray: !!aiData.shouldSpray,
+      confidence: aiData.confidence || 0.9,
+      isHealthy: !!aiData.isHealthy,
       timestamp: new Date().toISOString()
     };
 
