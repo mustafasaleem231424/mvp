@@ -101,11 +101,11 @@ body {
   }
 }
 
-/* Responsive Typography Scaling */
-h1 { font-size: clamp(2.5rem, 8vw, 8rem); line-height: 1; }
-h2 { font-size: clamp(2rem, 6vw, 4rem); line-height: 1.1; }
-h3 { font-size: clamp(1.25rem, 4vw, 2.5rem); }
-p { font-size: clamp(0.9rem, 2vw, 1.125rem); }
+/* Compact Responsive Typography Scaling */
+h1 { font-size: clamp(2rem, 5vw, 5rem); line-height: 1; }
+h2 { font-size: clamp(1.5rem, 4vw, 3rem); line-height: 1.1; }
+h3 { font-size: clamp(1.1rem, 3vw, 1.8rem); }
+p { font-size: clamp(0.85rem, 1.5vw, 1rem); }
 
 /* Subtle organic texture - Adaptable opacity */
 body::before {

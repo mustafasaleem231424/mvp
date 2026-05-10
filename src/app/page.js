@@ -44,35 +44,31 @@ export default function LandingPage() {
               <span>Launch Engine</span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* ─── Hero Section (Golden Ratio Spacing) ───────── */}
-      <section className="relative pt-64 pb-40 px-6 lg:pt-80 lg:pb-64">
+               {/* ─── Hero Section (Compact Optimization) ───────── */}
+      <section className="relative pt-40 pb-24 px-6 lg:pt-48 lg:pb-32">
         {/* Deep Space Atmosphere */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-10%] right-[-5%] w-[1000px] h-[1000px] bg-[#10B981] opacity-[0.03] blur-[200px] rounded-full" />
-          <div className="absolute bottom-[-10%] left-[-5%] w-[1000px] h-[1000px] bg-[#10B981] opacity-[0.03] blur-[200px] rounded-full" />
+          <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-[#10B981] opacity-[0.02] blur-[150px] rounded-full" />
+          <div className="absolute bottom-[-10%] left-[-5%] w-[800px] h-[800px] bg-[#10B981] opacity-[0.02] blur-[150px] rounded-full" />
         </div>
         
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-7xl mx-auto text-center relative z-10"
+          className="max-w-5xl mx-auto text-center relative z-10"
         >
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-white/10 bg-white/5 text-white/60 text-[10px] font-black uppercase tracking-[0.4em] mb-12 backdrop-blur-2xl"
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 bg-white/5 text-white/50 text-[9px] font-black uppercase tracking-[0.3em] mb-10 backdrop-blur-xl"
           >
-            <span className="flex h-2 w-2 rounded-full bg-[#10B981] shadow-[0_0_10px_#10B981]" />
+            <span className="flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
             Elite Botanical Intelligence
           </motion.div>
 
           <motion.h1 
             variants={itemVariants}
-            className="text-7xl sm:text-9xl lg:text-[11rem] font-black tracking-tighter mb-12 leading-[0.85] text-white"
+            className="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter mb-10 leading-[0.9] text-white"
           >
             Nurture.<br />
             <span className="text-[#10B981]">Flourish.</span>
@@ -80,20 +76,20 @@ export default function LandingPage() {
 
           <motion.p 
             variants={itemVariants}
-            className="text-xl sm:text-3xl mb-16 max-w-4xl mx-auto leading-[1.6] text-white/50 font-medium tracking-tight"
+            className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-white/40 font-medium tracking-tight"
           >
-            Master your harvest with the world's most advanced plant pathology engine. PreciFarm empowers you with neural-grid diagnostics and soil-synergy intelligence to ensure every seed reaches its peak potential.
+            Master your harvest with the world's most advanced plant pathology engine. PreciFarm empowers you with neural-grid diagnostics and soil-synergy intelligence.
           </motion.p>
 
           <motion.div 
             variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-8 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <Link href="/dashboard" className="btn btn-primary text-2xl !py-8 !px-16 !rounded-full shadow-[0_20px_80px_rgba(255,255,255,0.15)] group">
-              <ScanLine className="w-8 h-8 group-hover:scale-110 transition-transform" /> 
+            <Link href="/dashboard" className="btn btn-primary text-xl !py-6 !px-12 !rounded-full shadow-xl group">
+              <ScanLine className="w-6 h-6 group-hover:scale-110 transition-transform" /> 
               <span>Start Analysis</span>
             </Link>
-            <Link href="/login" className="btn btn-secondary text-2xl !py-8 !px-16 !rounded-full border-white/5 hover:border-white/20 transition-all">
+            <Link href="/login" className="btn btn-secondary text-xl !py-6 !px-12 !rounded-full border-white/5 hover:border-white/10 transition-all">
               Farmer Portal
             </Link>
           </motion.div>
@@ -101,7 +97,7 @@ export default function LandingPage() {
           {/* Corrected Facts / Mastery Bar */}
           <motion.div 
             variants={itemVariants}
-            className="mt-32 grid grid-cols-2 md:grid-cols-4 gap-12 max-w-5xl mx-auto border-t border-white/5 pt-20"
+            className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto border-t border-white/5 pt-16"
           >
             {[
               { icon: Globe, label: 'Expert Nodes', val: 'Global' },
@@ -109,10 +105,10 @@ export default function LandingPage() {
               { icon: ShieldCheck, label: 'Precision', val: '99.4%' },
               { icon: BarChart3, label: 'Yield Mastery', val: '+24%' },
             ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center gap-3 group cursor-default">
-                <stat.icon className="w-6 h-6 text-[#10B981] group-hover:scale-125 transition-transform duration-500" />
-                <span className="text-3xl font-black text-white tracking-tighter">{stat.val}</span>
-                <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">{stat.label}</span>
+              <div key={i} className="flex flex-col items-center gap-2 group cursor-default">
+                <stat.icon className="w-5 h-5 text-[#10B981] group-hover:scale-110 transition-transform duration-500" />
+                <span className="text-2xl font-black text-white tracking-tighter">{stat.val}</span>
+                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">{stat.label}</span>
               </div>
             ))}
           </motion.div>
