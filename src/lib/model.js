@@ -67,7 +67,8 @@ export async function analyzeImage(imageElement) {
   try {
     const base64Image = await getBase64FromImage(imageElement);
 
-    const response = await fetch('/api/analyze', {
+    const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/analyze` : '/api/analyze';
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -125,7 +125,7 @@ export default function DashboardPage() {
       }
     } catch (err) {
       console.error('Analysis error:', err);
-      setResult({ error: 'Analysis failed. Please try again.' });
+      setResult({ error: 'Analysis Failed: ' + (err.message || 'Unknown Error'), details: err.stack });
     } finally {
       setLoading(false);
     }
