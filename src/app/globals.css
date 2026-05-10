@@ -101,16 +101,16 @@ body {
   }
 }
 
-/* Hybrid Responsive Typography (Readable & Fluid) */
-h1 { font-size: clamp(2.5rem, 8vw, 6rem); line-height: 1; letter-spacing: -0.05em; font-weight: 900; }
-h2 { font-size: clamp(2rem, 5vw, 4rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 800; }
-h3 { font-size: clamp(1.25rem, 3vw, 2rem); letter-spacing: -0.03em; font-weight: 700; }
-p { font-size: clamp(0.95rem, 1.2vw, 1.125rem); line-height: 1.6; color: rgba(255, 255, 255, 0.4); }
+/* Nano-Compact Responsive Typography */
+h1 { font-size: clamp(1.5rem, 4vw, 3rem); line-height: 1; letter-spacing: -0.05em; font-weight: 900; }
+h2 { font-size: clamp(1.25rem, 3vw, 2rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 800; }
+h3 { font-size: clamp(1rem, 2vw, 1.5rem); letter-spacing: -0.03em; font-weight: 700; }
+p { font-size: clamp(0.75rem, 1vw, 0.9rem); line-height: 1.4; color: rgba(255, 255, 255, 0.3); }
 
 @media (max-width: 640px) {
-  h1 { font-size: 3rem; }
-  h2 { font-size: 2.25rem; }
-  p { font-size: 1rem; }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  p { font-size: 0.8rem; }
 }
 
 /* Subtle organic texture - Adaptable opacity */
