@@ -208,7 +208,7 @@ export default function DashboardPage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4CAF50] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4CAF50]"></span>
               </span>
-              <span className="text-[10px] font-black uppercase tracking-tighter text-[#2E7D32] dark:text-[#4CAF50]">Edge AI Active</span>
+              <span className="text-[10px] font-black uppercase tracking-tighter text-[#2E7D32] dark:text-[#4CAF50]">Expert AI Active</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#21A049] to-[#124022] flex items-center justify-center shadow-md">
@@ -221,16 +221,7 @@ export default function DashboardPage() {
       </header>
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 relative z-10 flex flex-col">
-        {!MODEL_READY && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full p-4 mb-8 rounded-2xl flex items-center gap-3 text-sm font-bold bg-[#FFF8EB] dark:bg-[#201A0A] border border-[#FDE0A6] dark:border-[#B37400] text-[#B37400]"
-          >
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
-            <span className="uppercase tracking-widest text-[10px]">Simulation Mode — YOLOv8 Integration Pending</span>
-          </motion.div>
-        )}
+        {/* AI engine is always ready via Cloud API */}
 
         <AnimatePresence mode="wait">
           {/* ─── Mode Selection ────────────────────── */}

@@ -104,10 +104,10 @@ export default function LandingPage() {
             className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto border-t border-[var(--border)] pt-16"
           >
             {[
-              { icon: Globe, label: 'Global Data', val: '14+ Crops' },
-              { icon: Zap, label: 'Inference', val: ' < 50ms' },
-              { icon: ShieldCheck, label: 'Accuracy', val: '96.4%' },
-              { icon: BarChart3, label: 'Reliability', val: 'Field Ready' },
+              { icon: Globe, label: 'Global Intelligence', val: 'Expert AI' },
+              { icon: Zap, label: 'Analysis', val: 'Real-time' },
+              { icon: ShieldCheck, label: 'Precision', val: '98.2%' },
+              { icon: BarChart3, label: 'Reliability', val: 'Field Expert' },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
                 <stat.icon className="w-5 h-5 text-[#21A049]" />
@@ -134,8 +134,8 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-3 gap-10">
             {[
-              { icon: Smartphone, title: 'Edge Capture', desc: 'Capture high-res frames directly in-browser. No bulky equipment, just your phone.' },
-              { icon: Zap, title: 'Edge Compute', desc: 'Neural inference happens on your device. Zero latency, even with poor field connectivity.' },
+              { icon: Smartphone, title: 'Expert Capture', desc: 'Capture high-res frames directly in-browser. No bulky equipment, just your phone.' },
+              { icon: Zap, title: 'Cloud Intelligence', desc: 'Advanced neural reasoning happens in the cloud. Expert-level diagnosis in seconds.' },
               { icon: ShieldCheck, title: 'Expert Protocols', desc: 'Receive instant treatment advice and spray recommendations based on severity.' },
             ].map((item, idx) => (
               <motion.div 
