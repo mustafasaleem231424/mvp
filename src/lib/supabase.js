@@ -10,44 +10,32 @@
 import { createClient } from '@supabase/supabase-js';
 
 // These come from environment variables (set in .env.local)
-// Placeholder values allow the app to build without Supabase configured.
-// Auth/DB features won't work until real credentials are provided.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
-
-// Validate configuration in development
-if (process.env.NODE_ENV === 'development') {
-  if (!supabaseUrl) {
-    console.warn(
-      '⚠️ NEXT_PUBLIC_SUPABASE_URL is not set. ' +
-      'Copy .env.local.example to .env.local and fill in your Supabase credentials.'
-    );
-  }
-  if (!supabaseAnonKey) {
-    console.warn(
-      '⚠️ NEXT_PUBLIC_SUPABASE_ANON_KEY is not set.'
-    );
-  }
-}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 /**
  * Supabase client instance for browser-side use.
  * Uses the anonymous key — all data access is governed by RLS policies.
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    // Persist session in localStorage for mobile compatibility
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
-  },
-});
+export const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) 
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    })
+  : null;
+
+// Mock function for when supabase is not configured
+const mockResult = { data: null, error: { message: 'Supabase not configured' } };
 
 /**
  * Helper: Get the currently authenticated user.
  * Returns null if not logged in.
  */
 export async function getCurrentUser() {
+  if (!supabase) return null;
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error) {
     console.error('Error getting user:', error.message);
@@ -60,6 +48,7 @@ export async function getCurrentUser() {
  * Helper: Sign up a new user with email and password.
  */
 export async function signUp(email, password) {
+  if (!supabase) return mockResult;
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -71,6 +60,7 @@ export async function signUp(email, password) {
  * Helper: Sign in with email and password.
  */
 export async function signIn(email, password) {
+  if (!supabase) return mockResult;
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -82,6 +72,7 @@ export async function signIn(email, password) {
  * Helper: Sign out the current user.
  */
 export async function signOut() {
+  if (!supabase) return mockResult;
   const { error } = await supabase.auth.signOut();
   return { error };
 }
@@ -97,6 +88,7 @@ export async function signOut() {
  * @param {string} [scanData.imageUrl] - Optional image URL from storage
  */
 export async function saveScanResult(scanData) {
+  if (!supabase) return mockResult;
   const { data, error } = await supabase
     .from('scans')
     .insert([{
@@ -119,6 +111,7 @@ export async function saveScanResult(scanData) {
  * @param {number} limit - Maximum results to return
  */
 export async function getScanHistory(userId, limit = 50) {
+  if (!supabase) return mockResult;
   const { data, error } = await supabase
     .from('scans')
     .select('*')

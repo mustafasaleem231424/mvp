@@ -1,11 +1,11 @@
 'use client';
+export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Leaf, Clock, CheckCircle2, AlertTriangle, Trash2 } from 'lucide-react';
 import { getCurrentUser, getScanHistory, supabase } from '@/lib/supabase';
-import { CLASS_LABELS, DISEASE_INFO } from '@/lib/constants';
 
 export default function HistoryPage() {
   const [scans, setScans] = useState([]);
@@ -103,13 +103,12 @@ export default function HistoryPage() {
           <div className="space-y-4">
             <AnimatePresence>
               {scans.map((scan, i) => {
-                const topDetection = scan.detections?.[0];
-                const className = topDetection?.className || '';
-                const label = topDetection?.label || CLASS_LABELS[className] || 'Unknown';
-                const isHealthy = topDetection?.isHealthy ?? false;
-                const confidence = topDetection?.confidence ?? scan.severity ?? 0;
-                const info = DISEASE_INFO[className];
-                const isSpray = scan.spray_decision === 'SPRAY';
+                const topDetection = scan.detections?.[0] || {};
+                const label = topDetection.label || scan.label || 'Unknown Plant';
+                const isHealthy = topDetection.isHealthy ?? scan.is_healthy ?? false;
+                const confidence = topDetection.confidence ?? scan.confidence ?? 0;
+                const diseaseInfo = topDetection.diseaseInfo || {};
+                const isSpray = scan.should_spray ?? scan.spray_decision === 'SPRAY';
 
                 return (
                   <motion.div
@@ -134,7 +133,7 @@ export default function HistoryPage() {
                         }
                         <h3 className="font-bold text-[var(--text)] truncate">{label}</h3>
                       </div>
-                      {info && <p className="text-xs text-[var(--text-secondary)] mb-1">{info.crop} · {info.severity} Risk</p>}
+                      {diseaseInfo.crop && <p className="text-xs text-[var(--text-secondary)] mb-1">{diseaseInfo.crop} · {diseaseInfo.severity || 'Expert AI'} Risk</p>}
                       <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)]">
                         <span>{(confidence * 100).toFixed(0)}% confidence</span>
                         <span>·</span>
