@@ -519,11 +519,11 @@ export default function DashboardPage() {
                     <motion.div whileHover={{ scale: 1.02 }} className="card !p-6 bg-white/5 border-white/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Confidence</p>
                       <p className="text-xl font-bold">{((result.confidence || 0) * 100).toFixed(1)}%</p>
-                    </div>
-                    <div className="card !p-6 bg-white/5 border-white/10">
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.02 }} className="card !p-6 bg-white/5 border-white/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Status</p>
                       <p className="text-xl font-bold uppercase">{result.shouldSpray ? 'Spray' : 'Safe'}</p>
-                    </div>
+                    </motion.div>
                   </div>
 
                   {/* Expert Advice Block */}
