@@ -164,11 +164,14 @@ export async function analyzeImage(imageElement) {
   const topPrediction = predictions[0];
   const isHealthy = topPrediction.isHealthy;
   const confidence = topPrediction.confidence;
+  const isNotPlant = confidence < SPRAY_CONFIG.outOfDistributionThreshold;
   const meetsSprayThreshold = !isHealthy && confidence >= SPRAY_CONFIG.sprayConfidenceThreshold;
   
   // Determine traffic light color
   let light = 'green';  // Default: healthy, no spray
-  if (!isHealthy && meetsSprayThreshold) {
+  if (isNotPlant) {
+    light = 'amber'; // Needs user attention to re-capture
+  } else if (!isHealthy && meetsSprayThreshold) {
     light = 'red';       // Disease confirmed → spray recommended
   } else if (!isHealthy && confidence >= SPRAY_CONFIG.confidenceThreshold) {
     light = 'amber';     // Possible disease → investigate further
@@ -178,6 +181,7 @@ export async function analyzeImage(imageElement) {
     predictions,
     topPrediction,
     isHealthy,
+    isNotPlant,
     confidence,
     light,           // 'green' | 'amber' | 'red'
     shouldSpray: light === 'red',

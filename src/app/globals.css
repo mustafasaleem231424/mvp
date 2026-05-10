@@ -6,50 +6,50 @@
    ───────────────────────────────────────────────────────── */
 
 :root {
-  /* Light Mode Palette (Default) */
-  --bg-color: #F8FAF7;
-  --bg-gradient: linear-gradient(180deg, #F0F5EE 0%, #F8FAF7 100%);
-  --surface: #FFFFFF;
-  --surface-hover: #F2F7F0;
-  --text: #1A2E20;
-  --text-secondary: #5C7363;
-  --border: rgba(33, 160, 73, 0.15);
+  /* Black Mode Palette (Default) */
+  --bg-color: #000000;
+  --bg-gradient: radial-gradient(circle at top right, #111111 0%, #000000 100%);
+  --surface: #0a0a0a;
+  --surface-hover: #141414;
+  --text: #ffffff;
+  --text-secondary: #a3a3a3;
+  --border: rgba(255, 255, 255, 0.15);
   --radius: 24px;
   
   --primary-glow: rgba(33, 160, 73, 0.25);
   --green-main: #21A049;
   --green-hover: #1D8F41;
-  --green-dark: #124022;
+  --green-dark: #ffffff;
   
   --status-green: #21A049;
   --status-amber: #E59500;
   --status-red: #D32F2F;
   
   --font-sans: var(--font-outfit), system-ui, sans-serif;
-  --header-bg: rgba(255, 255, 255, 0.85);
+  --header-bg: rgba(0, 0, 0, 0.85);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark Mode Palette - Deep Organic Night */
-    --bg-color: #0A0F0C;
-    --bg-gradient: radial-gradient(circle at top right, #121A15 0%, #0A0F0C 100%);
-    --surface: #141C17;
-    --surface-hover: #1A261F;
-    --text: #E8F5EE;
-    --text-secondary: #8CA392;
-    --border: rgba(33, 160, 73, 0.2);
+    /* Ensure it stays black in dark mode */
+    --bg-color: #000000;
+    --bg-gradient: radial-gradient(circle at top right, #111111 0%, #000000 100%);
+    --surface: #0a0a0a;
+    --surface-hover: #141414;
+    --text: #ffffff;
+    --text-secondary: #a3a3a3;
+    --border: rgba(255, 255, 255, 0.15);
     
-    --primary-glow: rgba(16, 185, 129, 0.3);
-    --green-main: #10B981; /* Brighter emerald for dark mode visibility */
-    --green-hover: #059669;
-    --green-dark: #DCFCE7;
+    --primary-glow: rgba(33, 160, 73, 0.3);
+    --green-main: #21A049;
+    --green-hover: #1D8F41;
+    --green-dark: #ffffff;
     
-    --status-green: #10B981;
-    --status-amber: #F59E0B;
-    --status-red: #EF4444;
+    --status-green: #21A049;
+    --status-amber: #E59500;
+    --status-red: #D32F2F;
     
-    --header-bg: rgba(10, 15, 12, 0.85);
+    --header-bg: rgba(0, 0, 0, 0.85);
   }
 }
 

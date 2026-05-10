@@ -190,6 +190,7 @@ CLASS_NAMES.forEach((name) => {
 export const SPRAY_CONFIG = {
   confidenceThreshold: 0.60,    // Minimum confidence to trust a prediction
   sprayConfidenceThreshold: 0.70, // Higher bar before recommending spray
+  outOfDistributionThreshold: 0.45, // If confidence is below this, it's likely not a plant leaf
 };
 
 // ─── App Metadata ───────────────────────────────────────

@@ -44,12 +44,14 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const [inputMode, setInputMode] = useState(null);
   const [cameraStream, setCameraStream] = useState(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const fileInputRef = useRef(null);
   const videoInputRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const imgRef = useRef(null);
+  const reportRef = useRef(null);
 
   const startCamera = useCallback(async () => {
     setResult(null);
@@ -147,16 +149,28 @@ export default function DashboardPage() {
     }
   }, [imagePreview]);
 
-  const handleDownloadReport = useCallback(() => {
-    if (!result) return;
-    const reportText = `CropGuard AI - Field Analysis Report\n======================================\nDate: ${new Date().toLocaleString()}\nStatus: ${result.isHealthy ? 'Healthy' : 'Disease Detected'}\nConfidence: ${(result.confidence * 100).toFixed(1)}%\nRecommendation: ${result.shouldSpray ? 'Immediate Spray Recommended' : (result.light === 'amber' ? 'Close Monitoring Required' : 'No Action Needed')}\n\nPrimary Detection: ${result.topPrediction.label}\n${result.topPrediction.diseaseInfo ? `\nDetails:\n- Crop: ${result.topPrediction.diseaseInfo.crop}\n- Disease: ${result.topPrediction.diseaseInfo.disease}\n- Severity: ${result.topPrediction.diseaseInfo.severity} Risk\n- Action Plan: ${result.topPrediction.diseaseInfo.advice}\n` : ''}`.trim();
-    const blob = new Blob([reportText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `CropGuard_Report_${Date.now()}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleDownloadPDF = useCallback(async () => {
+    if (!result || !reportRef.current) return;
+    setIsGeneratingPDF(true);
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const { jsPDF } = await import('jspdf');
+      
+      const canvas = await html2canvas(reportRef.current, { scale: 2, useCORS: true, logging: false });
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`CropGuard_Report_${Date.now()}.pdf`);
+    } catch (err) {
+      console.error('PDF generation failed:', err);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   }, [result]);
 
   const handleReset = useCallback(() => {
@@ -318,75 +332,49 @@ export default function DashboardPage() {
             </motion.div>
           )}
 
-          {/* ─── Result Stage ──────────────────────── */}
+          {/* ─── Refined Result Stage ──────────────────────── */}
           {result && !result.error && (
             <motion.div key="results" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="w-full space-y-8">
-              <div className="card !p-10 text-center relative overflow-hidden bg-gradient-to-b from-[var(--surface)] to-[var(--surface-hover)]">
-                <div className={`w-32 h-32 rounded-full mx-auto mb-8 light-${result.light}`} />
-                <h2 className="text-4xl font-black tracking-tighter mb-4 text-[var(--text)]">
-                  {result.isHealthy ? 'Healthy Growth' : result.topPrediction.label}
-                </h2>
-                
-                <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-sm mb-8">
-                  <span className="w-2 h-2 rounded-full" style={{ background: `var(--status-${result.light})` }} />
-                  <span className="text-xs font-black uppercase tracking-widest" style={{ color: `var(--status-${result.light})` }}>
-                    {result.shouldSpray ? 'Immediate Action Required' : result.light === 'amber' ? 'Increased Monitoring' : 'Stable Condition'}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 pt-8 border-t border-[var(--border)]">
-                  <div className="text-left">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)] mb-1">AI Confidence</p>
-                    <p className="text-2xl font-black text-[var(--text)]">{(result.confidence * 100).toFixed(1)}%</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)] mb-1">Protocol</p>
-                    <p className="text-sm font-bold text-[var(--green-main)]">{result.isHealthy ? 'Standard Care' : 'Treatment Active'}</p>
-                  </div>
-                </div>
-              </div>
-
-              {!result.isHealthy && result.topPrediction.diseaseInfo && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="card !p-8 space-y-8 border-l-4 border-l-[#21A049]">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] mb-2">Detected Pathogen</p>
-                      <h3 className="text-3xl font-black tracking-tight">{result.topPrediction.diseaseInfo.disease}</h3>
-                    </div>
-                    <span className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-[var(--border)] bg-[var(--surface-hover)]">
-                      {result.topPrediction.diseaseInfo.severity} Risk
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-8">
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] mb-1">Host Crop</p>
-                      <p className="font-bold">{result.topPrediction.diseaseInfo.crop}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] mb-1">Status</p>
-                      <p className="font-bold text-[#EF4444]">Action Needed</p>
-                    </div>
-                  </div>
-
-                  <div className="p-6 rounded-[24px] bg-[#21A049]/5 border border-[#21A049]/20 relative overflow-hidden group hover:bg-[#21A049]/10 transition-colors">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-[#21A049] mb-3 flex items-center gap-2">
-                      <Zap className="w-3 h-3"/> Recommended Treatment Protocol
-                    </p>
-                    <p className="text-lg font-medium leading-relaxed text-[var(--text)] italic">
-                      "{result.topPrediction.diseaseInfo.advice}"
+              {result.isNotPlant ? (
+                <div className="card !p-12 text-center relative overflow-hidden bg-[var(--surface)] border-2 border-amber-500/30 shadow-2xl">
+                  <AlertTriangle className="w-16 h-16 text-amber-500 mx-auto mb-6" />
+                  <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+                    Unrecognized Object
+                  </h2>
+                  <p className="text-[var(--text-secondary)] font-medium mb-8">
+                    The AI confidence score is extremely low ({(result.confidence * 100).toFixed(1)}%). This usually happens when the image is blurry, too dark, or does not contain a recognizable plant leaf.
+                  </p>
+                  
+                  <div className="mt-2 inline-block px-10 py-5 rounded-3xl bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-2 border-amber-200 dark:border-amber-800">
+                    <p className="text-2xl font-black uppercase tracking-widest">
+                      Please Re-Capture
                     </p>
                   </div>
-                </motion.div>
+                </div>
+              ) : (
+                <div className="card !p-12 text-center relative overflow-hidden bg-[var(--surface)] border-2 border-[var(--border)] shadow-2xl">
+                  <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
+                    {result.isHealthy ? 'Healthy' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
+                  </h2>
+                  
+                  <div className={`mt-6 inline-block px-10 py-5 rounded-3xl ${result.shouldSpray ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-2 border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-2 border-green-200 dark:border-green-800'}`}>
+                    <p className="text-3xl font-black uppercase tracking-widest">
+                      {result.shouldSpray ? 'Spray Pesticide' : 'Do Not Spray'}
+                    </p>
+                  </div>
+                </div>
               )}
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <button onClick={handleReset} className="btn btn-secondary flex-1 !py-5">
-                  <RefreshCw className="w-5 h-5"/> New Analysis
+                  <RefreshCw className="w-5 h-5"/> New Scan
                 </button>
-                <button onClick={handleDownloadReport} className="btn btn-primary flex-1 !py-5 shadow-2xl group">
-                  <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform"/> Save Report
-                </button>
+                {!result.isNotPlant && (
+                  <button onClick={handleDownloadPDF} disabled={isGeneratingPDF} className="btn btn-primary flex-1 !py-5 shadow-2xl group">
+                    {isGeneratingPDF ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform"/>}
+                    <span>{isGeneratingPDF ? 'Generating...' : 'Download Full PDF Report'}</span>
+                  </button>
+                )}
               </div>
             </motion.div>
           )}
@@ -401,6 +389,102 @@ export default function DashboardPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Hidden PDF Report Container */}
+        {result && (
+          <div className="fixed top-[-9999px] left-[-9999px] pointer-events-none" aria-hidden="true">
+            <div ref={reportRef} className="w-[794px] bg-white text-black p-12" style={{ minHeight: '1123px' }}>
+              {/* Header */}
+              <div className="border-b-4 border-[#21A049] pb-6 mb-8 flex justify-between items-end">
+                <div>
+                  <h1 className="text-4xl font-black text-[#124022] tracking-tighter">CropGuard AI</h1>
+                  <p className="text-xl font-bold text-[#21A049] uppercase tracking-widest mt-2">Diagnostic Reasoning Report</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold text-gray-500">{new Date().toLocaleString()}</p>
+                  <p className="text-sm font-bold text-gray-500 mt-1">ID: CG-{Math.random().toString(36).substr(2, 6).toUpperCase()}</p>
+                </div>
+              </div>
+
+              {/* Subject Image */}
+              <div className="mb-10">
+                <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-4">Analyzed Specimen</h2>
+                <div className="w-full h-[300px] rounded-2xl overflow-hidden border-2 border-gray-200">
+                  <img src={imagePreview} className="w-full h-full object-cover" alt="Subject" />
+                </div>
+              </div>
+
+              {/* Diagnosis Summary */}
+              <div className="mb-10 p-8 rounded-3xl bg-gray-50 border border-gray-200">
+                <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-6">Primary Diagnosis</h2>
+                <div className="flex items-center gap-6">
+                  <div className={`w-20 h-20 rounded-full flex-shrink-0 flex items-center justify-center ${result.isHealthy ? 'bg-green-100' : 'bg-red-100'}`}>
+                    <div className={`w-12 h-12 rounded-full ${result.isHealthy ? 'bg-green-500' : 'bg-red-500'}`} />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-gray-900 mb-2">
+                      {result.isHealthy ? 'Healthy Plant' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
+                    </h3>
+                    <p className="text-lg font-medium text-gray-600">
+                      Crop: {result.isHealthy ? 'Identified Plant' : result.topPrediction.diseaseInfo?.crop || 'Unknown'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Reasoning */}
+              <div className="mb-10">
+                <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-4">Diagnostic Reasoning</h2>
+                <div className="grid grid-cols-2 gap-6 mb-6">
+                  <div className="p-6 rounded-2xl border border-gray-200">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">AI Confidence Score</p>
+                    <p className="text-2xl font-black text-gray-900">{(result.confidence * 100).toFixed(1)}%</p>
+                  </div>
+                  <div className="p-6 rounded-2xl border border-gray-200">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Severity Level</p>
+                    <p className={`text-2xl font-black ${result.isHealthy ? 'text-green-600' : 'text-red-600'}`}>
+                      {result.isHealthy ? 'None' : result.topPrediction.diseaseInfo?.severity || 'High Risk'}
+                    </p>
+                  </div>
+                </div>
+
+                {!result.isHealthy && result.topPrediction.diseaseInfo?.advice && (
+                  <div className="p-6 rounded-2xl border border-[#21A049] bg-[#21A049]/5">
+                    <p className="text-xs font-bold text-[#21A049] uppercase tracking-widest mb-3">Pathology & Reasoning</p>
+                    <p className="text-lg text-gray-800 leading-relaxed font-medium">
+                      Based on visual symptom analysis, the AI model has identified characteristics consistent with {result.topPrediction.diseaseInfo?.disease}.
+                      <br/><br/>
+                      <span className="font-bold">Treatment Protocol:</span> {result.topPrediction.diseaseInfo.advice}
+                    </p>
+                  </div>
+                )}
+                {result.isHealthy && (
+                  <div className="p-6 rounded-2xl border border-[#21A049] bg-[#21A049]/5">
+                    <p className="text-xs font-bold text-[#21A049] uppercase tracking-widest mb-3">Observation</p>
+                    <p className="text-lg text-gray-800 leading-relaxed font-medium">
+                      The plant shows optimal growth parameters with no visible signs of pathogen infection, nutrient deficiency, or pest damage. Visual characteristics match expected healthy phenotypic expression. No intervention is currently necessary.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Recommendation */}
+              <div className="mt-auto">
+                <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-4">Final Action Recommendation</h2>
+                <div className={`p-8 rounded-3xl border-2 ${result.shouldSpray ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
+                  <h3 className={`text-2xl font-black uppercase tracking-widest mb-2 ${result.shouldSpray ? 'text-red-700' : 'text-green-700'}`}>
+                    {result.shouldSpray ? 'SPRAY PESTICIDE' : 'DO NOT SPRAY'}
+                  </h3>
+                  <p className={`font-medium ${result.shouldSpray ? 'text-red-600' : 'text-green-600'}`}>
+                    {result.shouldSpray 
+                      ? 'Based on the visual evidence and severity of the detected condition, targeted application of the appropriate pesticide or fungicide is strongly recommended to mitigate further crop loss.' 
+                      : 'Maintain current agronomic practices. Unnecessary pesticide application can damage the ecosystem and is not required at this time.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <canvas ref={canvasRef} className="hidden" />
       </main>
