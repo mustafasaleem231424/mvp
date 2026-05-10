@@ -1,7 +1,7 @@
 /**
  * constants.js
  * =============
- * Global configuration for the CropGuard Expert AI Engine.
+ * Global configuration for the PreciFarm Expert AI Engine.
  * All botanical intelligence is now provided dynamically by the Cloud AI.
  */
 
@@ -11,7 +11,7 @@ export const SPRAY_CONFIG = {
 };
 
 export const APP_CONFIG = {
-  name: 'CropGuard AI',
+  name: 'PreciFarm AI',
   tagline: 'Expert Plant Pathology & Diagnostic Intelligence',
   version: '2.5.0',
 };

@@ -37,7 +37,7 @@ export default function LandingPage() {
             >
               <Leaf className="w-6 h-6 text-white" />
             </motion.div>
-            <span className="font-extrabold text-2xl tracking-tighter text-[var(--green-dark)] group-hover:opacity-80 transition-opacity">CropGuard AI</span>
+            <span className="font-extrabold text-2xl tracking-tighter text-[var(--green-dark)] group-hover:opacity-80 transition-opacity">PreciFarm AI</span>
           </Link>
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="btn btn-primary !py-3 !px-7 text-sm !rounded-2xl group shadow-[0_10px_20px_rgba(33,160,73,0.2)]">
@@ -201,7 +201,7 @@ export default function LandingPage() {
               Join the new era of autonomous agriculture.
             </p>
             <Link href="/dashboard" className="btn btn-primary text-2xl !py-6 !px-14 !rounded-[32px] shadow-2xl hover:scale-105">
-              Launch CropGuard
+              Launch PreciFarm
             </Link>
           </motion.div>
         </div>
@@ -213,14 +213,14 @@ export default function LandingPage() {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#21A049] to-[#124022] flex items-center justify-center shadow-lg">
             <Leaf className="w-5 h-5 text-white" />
           </div>
-          <span className="font-extrabold text-2xl text-[var(--green-dark)] tracking-tighter">CropGuard AI</span>
+          <span className="font-extrabold text-2xl text-[var(--green-dark)] tracking-tighter">PreciFarm AI</span>
         </div>
         <div className="flex flex-wrap justify-center gap-10 mb-10 text-sm font-bold uppercase tracking-widest">
           <a href="#" className="hover:text-[var(--green-main)] transition-colors">Documentation</a>
           <a href="#" className="hover:text-[var(--green-main)] transition-colors">Edge Engine</a>
           <a href="#" className="hover:text-[var(--green-main)] transition-colors">Dataset</a>
         </div>
-        <p className="text-sm font-medium opacity-60">© {new Date().getFullYear()} CropGuard AI. Free and Open Source Platform.</p>
+        <p className="text-sm font-medium opacity-60">© {new Date().getFullYear()} PreciFarm AI. Free and Open Source Platform.</p>
       </footer>
     </main>
   );

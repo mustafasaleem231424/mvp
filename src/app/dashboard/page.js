@@ -195,7 +195,7 @@ export default function DashboardPage() {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`CropGuard_Report_${Date.now()}.pdf`);
+      pdf.save(`PreciFarm_Report_${Date.now()}.pdf`);
     } catch (err) {
       console.error('PDF generation failed:', err);
       alert('Failed to generate PDF. Please try again.');
@@ -252,7 +252,7 @@ export default function DashboardPage() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#21A049] to-[#124022] flex items-center justify-center shadow-md">
                 <Leaf className="w-4 h-4 text-white" />
               </div>
-              <span className="font-black tracking-tighter text-lg text-[var(--green-dark)]">CropGuard</span>
+              <span className="font-black tracking-tighter text-lg text-[var(--green-dark)]">PreciFarm</span>
             </div>
           </div>
         </div>
@@ -544,7 +544,7 @@ export default function DashboardPage() {
               {/* Header */}
               <div className="border-b-4 border-[#21A049] pb-6 mb-8 flex justify-between items-end">
                 <div>
-                  <h1 className="text-4xl font-black text-[#124022] tracking-tighter">CropGuard AI</h1>
+                  <h1 className="text-4xl font-black text-[#124022] tracking-tighter">PreciFarm AI</h1>
                   <p className="text-xl font-bold text-[#21A049] uppercase tracking-widest mt-2">Diagnostic Reasoning Report</p>
                 </div>
                 <div className="text-right">
@@ -652,7 +652,7 @@ export default function DashboardPage() {
       </main>
 
       <footer className="py-12 text-center">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-40">CropGuard Intelligence Protocol v2.4.0</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-40">PreciFarm Intelligence Protocol v2.4.0</p>
       </footer>
     </div>
   );

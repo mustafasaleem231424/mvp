@@ -1,6 +1,6 @@
-# 🌿 CropGuard AI — Expert Plant Pathology Engine
+# 🌿 PreciFarm AI — Expert Plant Pathology Engine
 
-**Cloud-Native Expert AI** for professional plant disease detection. CropGuard utilizes a high-expert reasoning engine (powered by Google Gemini 1.5 Flash) to provide agricultural diagnostics with botanical precision.
+**Cloud-Native Expert AI** for professional plant disease detection. PreciFarm utilizes a high-expert reasoning engine (powered by Google Gemini 1.5 Flash) to provide agricultural diagnostics with botanical precision.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![AI](https://img.shields.io/badge/AI-Expert_Reasoning-blue)

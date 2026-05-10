@@ -41,7 +41,7 @@ export default function LoginPage() {
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#21A049] to-[#124022] flex items-center justify-center shadow-lg">
               <Leaf className="w-6 h-6 text-white" />
             </div>
-            <span className="font-extrabold text-2xl text-[var(--green-dark)]">CropGuard AI</span>
+            <span className="font-extrabold text-2xl text-[var(--green-dark)]">PreciFarm AI</span>
           </Link>
           <p className="text-[var(--text-secondary)] text-lg">Welcome back, farmer.</p>
         </div>

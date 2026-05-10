@@ -7,7 +7,7 @@ const outfit = Outfit({
 });
 
 export const metadata = {
-  title: "CropGuard AI — Expert Botanical Diagnostics",
+  title: "PreciFarm AI — Expert Botanical Diagnostics",
   description:
     "Next-generation AI-powered plant pathology. Scan any crop to receive instant, expert-level diagnostics, tailored treatment protocols, and field management insights.",
   keywords: "plant disease detection, crop scanner, farming AI, botanical diagnostics, expert agriculture AI",
