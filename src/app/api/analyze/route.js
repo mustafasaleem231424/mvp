@@ -1,91 +1,97 @@
-/**
- * Hardware API Endpoint — POST /api/analyze
- * ============================================
- * Accepts a base64-encoded image and returns disease analysis.
- * 
- * This endpoint exists so that:
- *   1. Future hardware devices (Raspberry Pi, Arduino, ESP32)
- *      can POST images directly from a connected camera module.
- *   2. Third-party integrations can call this API programmatically.
- * 
- * Request body:
- *   { "image": "data:image/jpeg;base64,..." }
- * 
- * Response:
- *   { "success": true, "result": { light, shouldSpray, predictions, ... } }
- */
-
 import { NextResponse } from 'next/server';
-import { CLASS_NAMES, CLASS_LABELS, HEALTHY_CLASSES, DISEASE_INFO, SPRAY_CONFIG } from '@/lib/constants';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+// Initialize Gemini — Securely using Environment Variables
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(request) {
   try {
     const body = await request.json();
     
     if (!body.image) {
-      return NextResponse.json(
-        { success: false, error: 'Missing "image" field. Send a base64-encoded image.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'Missing "image" field. Send a base64-encoded image.' }, { status: 400 });
     }
 
-    // For now, return demo results (same logic as client-side demo mode).
-    // When the real model is integrated server-side (e.g., via ONNX Runtime),
-    // replace this with actual inference.
+    // Extract base64 part
+    const base64Data = body.image.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
     
-    const demoResults = getDemoResult();
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = `
+      You are an expert plant pathologist AI for the CropGuard platform.
+      Analyze the provided image of a crop or plant.
+      Determine if the plant is healthy or diseased.
+      Return a STRICT JSON object with the following structure, and NO markdown formatting or extra text:
+      {
+        "crop": "Name of the crop/plant (or Unknown)",
+        "isHealthy": boolean,
+        "disease": "Name of the disease or issue (or 'None' if healthy)",
+        "confidence": number between 0 and 1 representing your certainty,
+        "severity": "Low", "Medium", or "High" (or "None"),
+        "advice": "Detailed reasoning and specific treatment advice. Be explicit about whether pesticide/fungicide is needed.",
+        "shouldSpray": boolean
+      }
+    `;
+
+    const imageParts = [
+      {
+        inlineData: {
+          data: base64Data,
+          mimeType: "image/jpeg"
+        }
+      }
+    ];
+
+    const result = await model.generateContent([prompt, ...imageParts]);
+    const responseText = result.response.text();
+    
+    // Robust JSON extraction
+    let aiData;
+    try {
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('No JSON found in response');
+      aiData = JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      console.error("Parsing failed, trying fallback:", responseText);
+      const cleanJsonStr = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+      aiData = JSON.parse(cleanJsonStr);
+    }
+
+    // Format to match the frontend expected structure
+    const formattedResult = {
+      topPrediction: {
+        className: aiData.disease,
+        label: aiData.disease,
+        confidence: aiData.confidence,
+        isHealthy: aiData.isHealthy,
+        diseaseInfo: {
+          crop: aiData.crop,
+          disease: aiData.disease,
+          severity: aiData.severity,
+          advice: aiData.advice
+        }
+      },
+      light: aiData.isHealthy ? 'green' : (aiData.shouldSpray ? 'red' : 'amber'),
+      shouldSpray: aiData.shouldSpray,
+      confidence: aiData.confidence,
+      isHealthy: aiData.isHealthy,
+      timestamp: new Date().toISOString()
+    };
 
     return NextResponse.json({
       success: true,
-      result: demoResults,
-      hardware_note: 'This endpoint is ready for hardware integration. POST a base64 image to get analysis.',
+      result: formattedResult
     });
 
   } catch (err) {
+    console.error("Gemini API Error:", err);
     return NextResponse.json(
-      { success: false, error: err.message },
+      { success: false, error: 'AI Analysis failed: ' + err.message },
       { status: 500 }
     );
   }
 }
 
-// Health check
 export async function GET() {
-  return NextResponse.json({
-    status: 'ok',
-    model_ready: false, // Will be true when ONNX Runtime is set up server-side
-    supported_classes: CLASS_NAMES.length,
-    version: '1.0.0',
-    usage: 'POST /api/analyze with { "image": "data:image/jpeg;base64,..." }',
-  });
-}
-
-function getDemoResult() {
-  const scenarios = [
-    { className: 'Apple___healthy', isHealthy: true },
-    { className: 'Apple___Apple_scab', isHealthy: false },
-    { className: 'Tomato___Late_blight', isHealthy: false },
-    { className: 'Grape___Black_rot', isHealthy: false },
-  ];
-  const pick = scenarios[Math.floor(Math.random() * scenarios.length)];
-  const confidence = 0.85 + Math.random() * 0.12;
-  const isHealthy = pick.isHealthy;
-
-  let light = 'green';
-  if (!isHealthy && confidence >= SPRAY_CONFIG.sprayConfidenceThreshold) light = 'red';
-  else if (!isHealthy) light = 'amber';
-
-  return {
-    topPrediction: {
-      className: pick.className,
-      label: CLASS_LABELS[pick.className],
-      confidence,
-      isHealthy,
-      diseaseInfo: DISEASE_INFO[pick.className] || null,
-    },
-    light,
-    shouldSpray: light === 'red',
-    isDemo: true,
-    timestamp: new Date().toISOString(),
-  };
+  return NextResponse.json({ status: 'ok', engine: 'Gemini 1.5 Flash' });
 }
