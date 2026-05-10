@@ -4,7 +4,10 @@ export const dynamic = 'force-dynamic';
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Image as ImageIcon, Video, Scan, X, RefreshCw, AlertCircle, Leaf, CheckCircle2, AlertTriangle, ArrowLeft, Zap, Download, ChevronRight } from 'lucide-react';
+import { 
+  Leaf, Camera, ImageIcon, RefreshCw, AlertCircle, Scan, 
+  ArrowLeft, Download, Video, Zap, AlertTriangle, Bug 
+} from 'lucide-react';
 import { analyzeImage, MODEL_READY } from '@/lib/model';
 
 // Expert Diagnostic Engine - Audio Cues Deprecated for Direct Information UI
@@ -361,6 +364,28 @@ export default function DashboardPage() {
                       {result.isHealthy ? 'No Intervention Required' : result.shouldSpray ? 'Action Required: Spray Recommended' : 'Action Required: Monitor Closely'}
                     </p>
                   </div>
+
+                  {/* Expert Pathogen Spotlight */}
+                  {!result.isHealthy && (
+                    <div className="mb-8 card !p-8 bg-gradient-to-br from-[#124022] to-[#0a1f11] border-[#21A049]/30 relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <Bug className="w-24 h-24 text-[#21A049]" />
+                      </div>
+                      <div className="relative z-10">
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#21A049] mb-4">Pathogen Profile</h3>
+                        <div className="space-y-4">
+                          <div>
+                            <p className="text-3xl font-black tracking-tight text-white">{result.topPrediction.diseaseInfo?.disease}</p>
+                            <p className="text-sm font-bold text-[#21A049] italic opacity-80">{result.topPrediction.scientificName}</p>
+                          </div>
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#21A049]" />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{result.topPrediction.pathogenType} Pathogen</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Info-Driven Insights Grid */}
                   <div className="grid grid-cols-2 gap-4 mb-8">

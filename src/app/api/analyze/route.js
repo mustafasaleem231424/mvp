@@ -49,12 +49,14 @@ export async function POST(request) {
       Analyze for diseases and return:
       {
         "isNotPlant": false,
-        "crop": "Species",
-        "disease": "Disease",
+        "crop": "Species Name",
+        "disease": "Common Disease Name",
+        "scientificName": "Scientific Pathogen Name (e.g. Venturia inaequalis)",
+        "pathogenType": "Fungal/Bacterial/Viral/Nutrient",
         "isHealthy": boolean,
         "confidence": number,
         "severity": "Low/Medium/High",
-        "advice": "Treatment",
+        "advice": "Treatment Protocol",
         "shouldSpray": boolean
       }
     `;
@@ -88,11 +90,14 @@ export async function POST(request) {
       isNotPlant: !!aiData.isNotPlant,
       topPrediction: {
         label: aiData.disease || 'Unknown',
+        scientificName: aiData.scientificName || 'N/A',
+        pathogenType: aiData.pathogenType || 'Unknown',
         confidence: aiData.confidence || 0.8,
         isHealthy: !!aiData.isHealthy,
         diseaseInfo: {
           crop: aiData.crop || 'Plant',
           disease: aiData.disease || 'Unknown',
+          scientificName: aiData.scientificName || 'N/A',
           severity: aiData.severity || 'Medium',
           advice: aiData.advice || 'Standard monitoring protocol.'
         }

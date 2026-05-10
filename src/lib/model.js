@@ -107,10 +107,13 @@ export async function analyzeImage(imageElement) {
       confidence: 0.942,
       topPrediction: {
         label: "Apple Scab (Venturia inaequalis)",
+        scientificName: "Venturia inaequalis",
+        pathogenType: "Fungal",
         confidence: 0.942,
         diseaseInfo: {
           crop: "Apple",
           disease: "Apple Scab",
+          scientificName: "Venturia inaequalis",
           severity: "High",
           advice: "Detected characteristic olive-green to black velvety spots. Recommend immediate application of Captan or Mancozeb fungicide. Prune affected branches to improve airflow."
         }
